@@ -17,4 +17,10 @@ public interface RetrofitInterface {
     @GET("/posts")
     Call<List<Post>> getPosts();
 
+    @GET("/users")
+    Call<List<User>> getAllUsers();
+
+    @GET("/users/{userId}")
+    Call<List<User>> getUser(@Path("userId") int userId);
+
 }
