@@ -1,35 +1,34 @@
 package com.mobile.restclient;
 
 import android.content.Context;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class MyListAdapter extends BaseAdapter {
 
-    List<Post> list;
+    List<Post> posts;
     Context context;
 
-    public MyListAdapter(Context context, List<Post> list){
-        this.list = list;
+    public MyListAdapter(Context context, List<Post> posts){
+        this.posts = posts;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return posts.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return list.get(position);
+        return posts.get(position);
     }
 
     @Override
@@ -39,43 +38,27 @@ public class MyListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-
-        if (convertView == null) {
-            holder = new ViewHolder();
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item_list, null, true);
-
-            holder.id = (TextView) convertView.findViewById(R.id.id);
-//            holder.tvcountry = (TextView) convertView.findViewById(R.id.country);
-//            holder.tvcity = (TextView) convertView.findViewById(R.id.city);
-
-            convertView.setTag(holder);
-        }else {
-            // the getTag returns the viewHolder object set as a tag to the view
-            holder = (ViewHolder)convertView.getTag();
+        if(convertView == null){
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list,parent,false);
         }
+        TextView txtId = convertView.findViewById(R.id.jsonId);
+        TextView userId = convertView.findViewById(R.id.userId);
+        TextView title = convertView.findViewById(R.id.title);
 
-//        Picasso.get().load(dataModelArrayList.get(position).getImgURL()).into(holder.iv);
-        holder.id.setText("ID: "+ list.get(position).getId());
-//        holder.tvcountry.setText("Country: "+dataModelArrayList.get(position).getCountry());
-//        holder.tvcity.setText("City: "+dataModelArrayList.get(position).getCity());
+        final Post thisPost = posts.get(position);
 
-        System.out.println("IT REACHES END OF THIS METHOD");
+        txtId.setText("id: " + String.valueOf(thisPost.getId()));
+        userId.setText("userId: " + String.valueOf(thisPost.getUserId()));
+        title.setText("title: " + thisPost.getTitle());
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                Toast.makeText(context, String.valueOf(thisPost.getId()), Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return convertView;
     }
 
-    public static class ViewHolder{
-
-        public TextView id;
-        TextView textView;
-
-
-//        public ViewHolder(View itemView) {
-//            this.itemView = itemView;
-//            textView = itemView.findViewById(R.id.itemView);
-//        }
-
-    }
 }

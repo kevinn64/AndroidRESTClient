@@ -24,6 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     ListView listView;
+    MyListAdapter myListAdapter;
     final String BASE_URL = "https://jsonplaceholder.typicode.com/posts/";
 
     @Override
@@ -58,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(content);
                 }
 
-                String jsonResponse = response.body().toString();
-                try {
-                    writeListView(jsonResponse);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                populateListView(posts);
+//                String jsonResponse = response.body().toString();
+//                try {
+//                    writeListView(jsonResponse);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             @Override
@@ -74,43 +76,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    private void writeListView(String response) throws JSONException {
-
-        try {
-            //getting the whole json object from the response
-            JSONObject obj = new JSONObject(response);
-            if(obj != null){
-
-                List<Post> postList = new ArrayList<>();
-                JSONArray dataArray  = obj.getJSONArray("data");
-
-                for (int i = 0; i < dataArray.length(); i++) {
-
-                    Post posts = new Post();
-                    JSONObject dataobj = dataArray.getJSONObject(i);
-
-                    posts.setId(dataobj.getInt("id"));
-//                    modelListView.setImgURL(dataobj.getString("imgURL"));
-//                    modelListView.setName(dataobj.getString("name"));
-//                    modelListView.setCountry(dataobj.getString("country"));
-//                    modelListView.setCity(dataobj.getString("city"));
-
-                    postList.add(posts);
-
-                }
-
-                MyListAdapter myListAdapter = new MyListAdapter(this, postList);
-                listView.setAdapter(myListAdapter);
-
-            }else {
-                Toast.makeText(MainActivity.this, obj.optString("message")+"", Toast.LENGTH_SHORT).show();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    private void populateListView(List<Post> postList) {
+        listView = findViewById(R.id.listView);
+        myListAdapter = new MyListAdapter(this, postList);
+        listView.setAdapter(myListAdapter);
     }
+
 
 }
