@@ -6,27 +6,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/userId"
+            android:id="@+id/id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-
-            android:text="userId" />
+            android:text="email" />
         <TextView
-            android:id="@+id/jsonId"
+            android:id="@+id/commentTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/userId"
-            android:text="id"/>
-
-
+            android:layout_below="@+id/id"
+            android:text="title"/>
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/commentBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/jsonId"
-            android:text="title" />
-
+            android:layout_below="@+id/commentTitle"
+            android:text="body" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

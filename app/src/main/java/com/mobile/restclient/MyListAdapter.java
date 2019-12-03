@@ -1,7 +1,7 @@
 package com.mobile.restclient;
 
 import android.content.Context;
-import android.text.Layout;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +39,9 @@ public class MyListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_list,parent,false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.post_list,parent,false);
         }
-        TextView txtId = convertView.findViewById(R.id.jsonId);
+        TextView txtId = convertView.findViewById(R.id.id);
         TextView userId = convertView.findViewById(R.id.userId);
         TextView title = convertView.findViewById(R.id.title);
 
@@ -55,6 +55,14 @@ public class MyListAdapter extends BaseAdapter {
             @Override
             public void onClick(View view){
                 Toast.makeText(context, String.valueOf(thisPost.getId()), Toast.LENGTH_SHORT).show();
+                System.out.println(thisPost.getId());
+
+                Intent intent = new Intent(context, PostActivity.class);
+                intent.putExtra("postId", thisPost.getId());
+                intent.putExtra("userId", thisPost.getUserId());
+                intent.putExtra("postTitle", thisPost.getTitle());
+                intent.putExtra("blogBody", thisPost.getText());
+                context.startActivity(intent);
             }
         });
 

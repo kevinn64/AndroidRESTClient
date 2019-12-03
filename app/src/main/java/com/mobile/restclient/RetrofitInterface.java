@@ -21,6 +21,8 @@ public interface RetrofitInterface {
     Call<List<User>> getAllUsers();
 
     @GET("/users/{userId}")
-    Call<List<User>> getUser(@Path("userId") int userId);
+    Call<User> getUser(@Path("userId") int userId);
 
+    @GET("/comments")
+    Call<List<Comment>> getPostComments(@Query("postId") int pId);
 }

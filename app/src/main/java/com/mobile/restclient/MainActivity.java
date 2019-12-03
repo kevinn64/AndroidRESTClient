@@ -49,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 List<Post> posts = response.body();
-                for(Post post: posts){
-                    String content = "";
-                    content += "ID: " + post.getId() + "\n";
-                    content += "USER ID: " + post.getUserId() + "\n";
-                    content += "TITLE : " + post.getTitle() + "\n";
-                    content += "TEXT : " + post.getText() + "\n\n";
-
-                    System.out.println(content);
-                }
+//                for(Post post: comments){
+//                    String content = "";
+//                    content += "ID: " + post.getId() + "\n";
+//                    content += "USER ID: " + post.getUserId() + "\n";
+//                    content += "TITLE : " + post.getTitle() + "\n";
+//                    content += "TEXT : " + post.getText() + "\n\n";
+//
+//                    System.out.println(content);
+//                }
 
                 populateListView(posts);
 //                String jsonResponse = response.body().toString();
