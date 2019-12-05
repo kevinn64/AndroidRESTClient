@@ -6,6 +6,10 @@ public class User {
     private int id;
     private String name;
     private String username;
+    private String email;
+    private Address address;
+    private String phone;
+    private String website;
 
     public int getId() {
         return id;
@@ -29,5 +33,37 @@ public class User {
 
     public void setUserName(String userName) {
         this.username = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 }

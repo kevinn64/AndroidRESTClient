@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -111,6 +112,48 @@ public class PostActivity extends AppCompatActivity {
             }
         });
 
+        nameOfUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //GO TO USER'S PAGE
+                System.out.println("CLICKED USER NAME");
+                Intent intent = getIntent();
+                int id = intent.getIntExtra("userId",0);
+                Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/users/")
+                        .addConverterFactory(GsonConverterFactory.create()).build();
+
+                RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
+
+                Call<User> call = retrofitInterface.getUser(id);
+
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if(!response.isSuccessful()){
+                            System.out.println("====== CODE : " + response.code());
+                            return;
+                        }
+                        User user = response.body();
+                        //nameOfUser.setText("Name: " + user.getAddress().getGeo().getLng());
+                        Intent intent = new Intent(PostActivity.this, UserActivity.class);
+                        intent.putExtra("name",user.getName());
+                        intent.putExtra("username",user.getUserName());
+                        intent.putExtra("email",user.getEmail());
+                        intent.putExtra("phone",user.getPhone());
+                        intent.putExtra("website",user.getWebsite());
+                        intent.putExtra("lat",user.getAddress().getGeo().getLat());
+                        intent.putExtra("lng",user.getAddress().getGeo().getLng());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        System.out.println("====================== USERS ERROR =================");
+                        System.out.println(t.getMessage());
+                    }
+                });
+            }
+        });
 
     }
 
