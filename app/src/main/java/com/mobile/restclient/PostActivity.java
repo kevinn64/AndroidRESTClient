@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class PostActivity extends AppCompatActivity {
     TextView nameOfUser, postTitle, blogBody;
     ListView listViewComments;
     CommentListAdapter commentListAdapter;
+    Button postButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,14 @@ public class PostActivity extends AppCompatActivity {
         postTitle = findViewById(R.id.postTitle);
         blogBody = findViewById(R.id.blogBody);
         listViewComments = findViewById(R.id.listViewComments);
+        postButton = findViewById(R.id.postButton);
+
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createComment();
+            }
+        });
 
         // GRAB INTENT DATA
         Intent intent = getIntent();
@@ -136,6 +147,7 @@ public class PostActivity extends AppCompatActivity {
                         User user = response.body();
                         //nameOfUser.setText("Name: " + user.getAddress().getGeo().getLng());
                         Intent intent = new Intent(PostActivity.this, UserActivity.class);
+                        intent.putExtra("userId", user.getId());
                         intent.putExtra("name",user.getName());
                         intent.putExtra("username",user.getUserName());
                         intent.putExtra("email",user.getEmail());
@@ -161,5 +173,36 @@ public class PostActivity extends AppCompatActivity {
         listViewComments = findViewById(R.id.listViewComments);
         commentListAdapter = new CommentListAdapter(this, commentList);
         listViewComments.setAdapter(commentListAdapter);
+    }
+
+    private void createComment(){
+        Comment comment = new Comment(10,10,"yo","yo@email.com","yes");
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/comments/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
+
+        Call<Comment> call = retrofitInterface.createComment(comment);
+
+        call.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                if(!response.isSuccessful()){
+                    System.out.println("====== CODE : " + response.code());
+                    return;
+                }
+                System.out.println("RESPONSE CODE:" + response.code());
+                String message = "Response code: " + response.code() + ". Post succesfully added";
+                Toast.makeText(PostActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
+                System.out.println("====================== COMMENT POST ERROR =================");
+                System.out.println(t.getMessage());
+                Toast.makeText(PostActivity.this, "Error code: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

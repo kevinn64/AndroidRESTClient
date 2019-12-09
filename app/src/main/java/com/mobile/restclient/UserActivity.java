@@ -4,6 +4,8 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,9 +14,21 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class UserActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    TextView name, userName, email, phone, website;
+    ListView userPosts;
+
+    UserPostsListAdapter userPostsListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +39,61 @@ public class UserActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        name = findViewById(R.id.name);
+        userName = findViewById(R.id.username);
+        email = findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
+        website = findViewById(R.id.website);
+
+        // GRAB INTENT DATA
         Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
+        int mUserId = intent.getIntExtra("userId",0);
+        String mName = intent.getStringExtra("name");
+        String mUserName = intent.getStringExtra("username");
+        String mEmail = intent.getStringExtra("email");
+        String mPhone = intent.getStringExtra("phone");
+        String mWebsite = intent.getStringExtra("website");
         System.out.println(name);
+
+        name.setText(mName);
+        userName.setText(mUserName);
+        email.setText(mEmail);
+        phone.setText(mPhone);
+        website.setText(mWebsite);
+
+        // USER POSTS LIST VIEW
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/posts/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        RetrofitInterface retrofitInterface = retrofit.create(RetrofitInterface.class);
+
+        Call<List<Post>> call = retrofitInterface.getUserPosts(mUserId);
+
+        call.enqueue(new Callback<List<Post>>() {
+            @Override
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
+                if(!response.isSuccessful()){
+                    System.out.println("====== CODE : " + response.code());
+                    return;
+                }
+                List<Post> posts = response.body();
+                populateListView(posts);
+            }
+
+            @Override
+            public void onFailure(Call<List<Post>> call, Throwable t) {
+                System.out.println("====================== USERS ERROR =================");
+                System.out.println(t.getMessage());
+            }
+        });
+
     }
 
-
+    private void populateListView(List<Post> userPostList) {
+        userPosts = findViewById(R.id.userPosts);
+        userPostsListAdapter = new UserPostsListAdapter(this, userPostList);
+        userPosts.setAdapter(userPostsListAdapter);
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.

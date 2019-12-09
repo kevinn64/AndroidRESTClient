@@ -25,4 +25,10 @@ public interface RetrofitInterface {
 
     @GET("/comments")
     Call<List<Comment>> getPostComments(@Query("postId") int pId);
+
+    @GET("/posts")
+    Call<List<Post>> getUserPosts(@Query("userId") int uId);
+
+    @POST("/comments")
+    Call<Comment> createComment(@Body Comment comment);
 }
