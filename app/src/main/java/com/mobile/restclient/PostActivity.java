@@ -97,23 +97,7 @@ public class PostActivity extends AppCompatActivity {
                     return;
                 }
                 List<Comment> comments = response.body();
-//                for(Post post: comments){
-//                    String content = "";
-//                    content += "ID: " + post.getId() + "\n";
-//                    content += "USER ID: " + post.getUserId() + "\n";
-//                    content += "TITLE : " + post.getTitle() + "\n";
-//                    content += "TEXT : " + post.getText() + "\n\n";
-//
-//                    System.out.println(content);
-//                }
-
                 populateListView(comments);
-//                String jsonResponse = response.body().toString();
-//                try {
-//                    writeListView(jsonResponse);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             @Override
@@ -145,7 +129,6 @@ public class PostActivity extends AppCompatActivity {
                             return;
                         }
                         User user = response.body();
-                        //nameOfUser.setText("Name: " + user.getAddress().getGeo().getLng());
                         Intent intent = new Intent(PostActivity.this, UserActivity.class);
                         intent.putExtra("userId", user.getId());
                         intent.putExtra("name",user.getName());

@@ -52,21 +52,6 @@ public class UserPostsListAdapter extends BaseAdapter {
         title.setText("title: " + thisPost.getTitle());
         body.setText("body: " + thisPost.getText());
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-//                Toast.makeText(context, String.valueOf(thisPost.getId()), Toast.LENGTH_SHORT).show();
-//                System.out.println(thisPost.getId());
-//
-//                Intent intent = new Intent(context, PostActivity.class);
-//                intent.putExtra("postId", thisPost.getId());
-//                intent.putExtra("userId", thisPost.getUserId());
-//                intent.putExtra("postTitle", thisPost.getTitle());
-//                intent.putExtra("blogBody", thisPost.getText());
-//                context.startActivity(intent);
-            }
-        });
-
         return convertView;
     }
 

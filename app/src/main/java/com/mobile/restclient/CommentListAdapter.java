@@ -55,12 +55,6 @@ public class CommentListAdapter extends BaseAdapter {
             public void onClick(View view){
                 Toast.makeText(context, String.valueOf(thisComment.getId()), Toast.LENGTH_SHORT).show();
                 System.out.println(thisComment.getId());
-
-//                Intent intent = new Intent(context, PostActivity.class);
-//                intent.putExtra("userId", thisComment.getUserId());
-//                intent.putExtra("postTitle", thisComment.getTitle());
-//                intent.putExtra("blogBody", thisComment.getText());
-//                context.startActivity(intent);
             }
         });
 
